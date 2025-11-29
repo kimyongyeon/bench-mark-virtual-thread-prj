@@ -24,9 +24,9 @@ Spring의 `@Async`는 AOP(Aspect Oriented Programming)를 기반으로 동작하
 
 ```mermaid
 flowchart TD
-    Caller[외부 호출자] --> Proxy[MyService Proxy\n(@Async Interceptor 동작)]
-    Proxy --> Impl[MyServiceImpl\n(실제 객체)]
-    Impl --"this.syncWork() 호출\n(Proxy 우회)"--> Impl
+    Caller[외부 호출자] --> Proxy["MyService Proxy<br/>(@Async Interceptor 동작)"]
+    Proxy --> Impl["MyServiceImpl<br/>(실제 객체)"]
+    Impl --"this.syncWork() 호출<br/>(Proxy 우회)"--> Impl
     
     style Proxy fill:#f9f,stroke:#333,stroke-width:2px
     style Impl fill:#bbf,stroke:#333,stroke-width:2px
@@ -183,19 +183,19 @@ class MainService {
 
 ```mermaid
 flowchart LR
-    subgraph FAIL [Case A: Self 호출 (실패)]
+    subgraph FAIL ["Case A: Self 호출 (실패)"]
         direction TB
         A1[MyService.asyncWork] -->|Direct Call| A2[this.syncWork]
         A2 --> A3[동일 Thread 실행]
         A3 --> A4[Blocking 발생]
     end
 
-    subgraph SUCCESS [Case B: Proxy 호출 (성공)]
+    subgraph SUCCESS ["Case B: Proxy 호출 (성공)"]
         direction TB
         B1[Caller] -->|Proxy Call| B2[Proxy.asyncWork]
         B2 -->|New Thread| B3[AsyncServiceImpl]
         B3 -->|Bean Injection| B4[SyncService 호출]
-        B4 --> B5[@Async 정상 적용]
+        B4 --> B5["@Async 정상 적용"]
     end
 ```
 
